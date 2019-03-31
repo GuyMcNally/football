@@ -2,7 +2,7 @@ import psycopg2
 from .config import config
 
 
-def connect():
+def connect(query):
     """ Connect to the PostgreSQL database server """
     connection = None
     try:
@@ -12,18 +12,20 @@ def connect():
         # connect to the PostgreSQL server
         print('Connecting to the PostgreSQL database... ')
         connection = psycopg2.connect(**params)
+        connection.autocommit = True
 
         # create a cursor
         cursor = connection.cursor()
 
- # execute a statement
-        print('PostgreSQL database version:')
-        cursor.execute('SELECT version()')
+        # execute a statement
+        print('QUERY:')
+        print(query)
+        cursor.execute(query)
 
         # display the PostgreSQL database server version
-        db_version = cursor.fetchone()
-        print(db_version)
-
+        result = cursor.fetchone()
+        print(result)
+        return result
      # close the communication with the PostgreSQL
         cursor.close()
     except (Exception, psycopg2.DatabaseError) as error:
