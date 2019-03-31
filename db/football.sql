@@ -74,7 +74,7 @@ elapsed INT4
 -- ADD recirc INT4,
 -- ADD engaged INT4;
 
--- alter role football WITH PASSWORD 'NewPassword';
+-- alter role football WITH PASSWORD 'FBmodel1';
 -- ALTER TABLE articles
 -- ADD relativeReadingTime REAL;
 
