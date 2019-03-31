@@ -1,3 +1,4 @@
+import requests
 from db.postgres import connect
 
 # connect()
@@ -39,3 +40,14 @@ connect('SELECT * FROM leagues;')
 def create_leagues(leagues):
     for league in leagues:
         create_league(league)
+
+def get_leagues():
+    response = requests.get("https://api-football-v1.p.rapidapi.com/leagues",  headers={
+        "X-RapidAPI-Key": "XXXX"
+        })
+    body = response.json()
+    print(body)
+    leagues = body['api']['leagues']
+    create_leagues(leagues)
+
+get_leagues()
