@@ -10,12 +10,22 @@ DROP TABLE IF EXISTS teams;
 
 CREATE TABLE leagues(
 id INT4 PRIMARY KEY,
-name VARCHAR(255) NOT NULL
+name VARCHAR(255) NOT NULL,
+country VARCHAR(255),
+country_code VARCHAR(255),
+season VARCHAR(255),
+season_start VARCHAR(255),
+season_end VARCHAR(255),
+logo VARCHAR(255),
+flag VARCHAR(255),
+standings BOOLEAN
 );
 
 CREATE TABLE teams(
 id INT4 PRIMARY KEY,
-name VARCHAR(255) NOT NULL
+name VARCHAR(255) NOT NULL,
+code VARCHAR(255),
+logo VARCHAR(255)
 );
 
 CREATE TABLE fixtures(
@@ -35,6 +45,20 @@ final_score VARCHAR(255) NOT NULL,
 penalty VARCHAR(255), 
 elapsed INT4
 );
+
+-- ALTER TABLE leagues
+-- ADD country VARCHAR(255),
+-- ADD country_code VARCHAR(255),
+-- ADD season VARCHAR(255),
+-- ADD season_start VARCHAR(255),
+-- ADD season_end VARCHAR(255),
+-- ADD logo VARCHAR(255),
+-- ADD flag VARCHAR(255),
+-- ADD standings BOOLEAN;
+
+-- ALTER TABLE teams
+-- ADD code VARCHAR(255),
+-- ADD logo VARCHAR(255)
 
 
         -- "fixture_id": "2839",
