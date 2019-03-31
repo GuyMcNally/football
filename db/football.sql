@@ -1,8 +1,8 @@
-CREATE USER docker;
-CREATE DATABASE docker;
-GRANT ALL PRIVILEGES ON DATABASE docker TO docker;
+CREATE USER football;
+CREATE DATABASE football;
+GRANT ALL PRIVILEGES ON DATABASE football TO football;
 
-\c docker docker
+\c football football
 
 DROP TABLE IF EXISTS fixtures;
 DROP TABLE IF EXISTS leagues;
@@ -22,7 +22,7 @@ CREATE TABLE fixtures(
 id INT4 PRIMARY KEY,
 event_date VARCHAR(255) NOT NULL,
 event_timestamp VARCHAR(255) NOT NULL,
-league INT4 REFERENCES league_id(id) NOT NULL,
+league INT4 REFERENCES leagues(id) NOT NULL,
 round TEXT,
 home_team INT4 REFERENCES teams(id) NOT NULL,
 away_team INT4 REFERENCES teams(id) NOT NULL,
@@ -74,7 +74,7 @@ elapsed INT4
 -- ADD recirc INT4,
 -- ADD engaged INT4;
 
-
+-- alter role football WITH PASSWORD 'NewPassword';
 -- ALTER TABLE articles
 -- ADD relativeReadingTime REAL;
 
