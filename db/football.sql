@@ -116,4 +116,3 @@ elapsed INT4
 -- ON (authors.id = articles.author)
 -- GROUP BY authors.id
 -- ORDER BY number_of_articles DESC;
-©
