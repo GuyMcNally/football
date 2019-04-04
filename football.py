@@ -6,17 +6,21 @@ from db.postgres import connect
 
 def create_team(team):
     query = '''INSERT INTO teams(
-        id, name, code, logo
+        id, name, logo,
     )
-    SELECT {0}, '{1}', '{2}', '{3}'
+    SELECT {0}, '{1}', '{2}'
     WHERE NOT EXISTS(SELECT id FROM teams WHERE id = {0});
-    '''.format(team['id'], team['name'], team['code'], team['logo'])
+    '''.format(team['team_id'], team['name'], team['logo'])
     connect(query)
 
+# I've dropped code as there is no code in API. https://api-football-v1.p.rapidapi.com/teams/league/ 
+# In fact I've had to use a league ID to get it to work, for ex 20 gives you this seasons premier league teams
+# what I then tried to do was default the code to 2 but as I'm not so bright I couldn't figure it out. 
+#team['code']
 
 def create_teams(teams):
     for team in teams:
-        create_team(team)
+        create_team(teams[team])
 
 
 # team = {"id": 999999998, "name": 'cats', "code": 'dogs', "logo": 'paw'}
@@ -56,7 +60,7 @@ def create_leagues(leagues):
 
 def get_leagues():
     response = requests.get("https://api-football-v1.p.rapidapi.com/leagues",  headers={
-        "X-RapidAPI-Key": "XXXX"
+        "X-RapidAPI-Key": "xx"
     })
     body = response.json()
     print(body)
@@ -64,5 +68,17 @@ def get_leagues():
     create_leagues(leagues)
 
 
-get_leagues()
-connect('SELECT * FROM leagues;')
+#get_leagues()
+#connect('SELECT * FROM leagues;')
+
+def get_teams():
+    response = requests.get("https://api-football-v1.p.rapidapi.com/teams/league/2",  headers={
+        "X-RapidAPI-Key": "xx"
+    })
+    body = response.json()
+    print(body)
+    teams = body['api']['teams']
+    create_teams(teams)
+
+get_teams()
+connect('SELECT * FROM teams;')
