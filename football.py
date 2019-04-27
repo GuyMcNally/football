@@ -1,7 +1,6 @@
 import requests
+import json
 from db.postgres import connect
-
-# connect()
 
 
 def create_team(team):
@@ -10,18 +9,20 @@ def create_team(team):
     )
     SELECT {0}, '{1}', '{2}', '{3}'
     WHERE NOT EXISTS(SELECT id FROM teams WHERE id = {0});
-    '''.format(team['id'], team['name'], team['code'], team['logo'])
+    '''.format(team['team_id'], team['name'], team['code'], team['logo'])
     connect(query)
 
 
 def create_teams(teams):
     for team in teams:
-        create_team(team)
+        create_team(teams[team])
 
 
-# team = {"id": 999999998, "name": 'cats', "code": 'dogs', "logo": 'paw'}
-# create_team(team)
-# connect('SELECT * FROM teams;')
+# with open('./data/pl_teams.json') as file:
+#     body = json.load(file)
+#     # print(body)
+#     teams = body['api']['teams']
+#     create_teams(teams)
 
 
 def create_league(league):
@@ -34,35 +35,39 @@ def create_league(league):
     connect(query)
 
 
-# league = {
-#     "league_id": "112",
-#     "name": " Super Lig",
-#     "country": "Turkey",
-#     "country_code": "TR",
-#     "season": "2017",
-#     "season_start": "2017-08-11",
-#     "season_end": "2018-05-19",
-#     "logo": "https://www.api-football.com/public/leagues/112.png",
-#     "flag": "https://www.api-football.com/public/flags/tr.svg",
-#     "standings": True
-# }
-
-# create_league(league)
-
 def create_leagues(leagues):
     for league in leagues:
         create_league(leagues[league])
 
 
 def get_leagues():
-    response = requests.get("https://api-football-v1.p.rapidapi.com/leagues",  headers={
-        "X-RapidAPI-Key": "XXXX"
-    })
+    response = requests.get("https://api-football-v1.p.rapidapi.com/leagues",
+                            headers={
+                                "X-RapidAPI-Key": "XXXX"
+                            })
     body = response.json()
     print(body)
     leagues = body['api']['leagues']
     create_leagues(leagues)
 
 
-get_leagues()
-connect('SELECT * FROM leagues;')
+def get_all_teams():
+    leagues = connect('SELECT * FROM leagues;')
+    for league in leagues:
+        if league[2] == "England" and league[4] == "2018":
+            get_team_for_league(league[0])
+
+
+def get_team_for_league(league_id):
+    response = requests.get(f'https://api-football-v1.p.rapidapi.com/teams/league/{league_id}',
+                            headers={
+                                "X-RapidAPI-Key": "XXXX"
+                            })
+    body = response.json()
+    print(body)
+    teams = body['api']['teams']
+    create_teams(teams)
+
+
+# get_all_teams()
+# connect('SELECT COUNT(*) FROM teams;')

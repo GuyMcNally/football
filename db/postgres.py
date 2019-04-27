@@ -23,7 +23,7 @@ def connect(query):
         cursor.execute(query)
 
         # display the PostgreSQL database server version
-        result = cursor.fetchone()
+        result = cursor.fetchall()
         print(result)
         return result
      # close the communication with the PostgreSQL
