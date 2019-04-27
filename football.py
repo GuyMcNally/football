@@ -58,6 +58,69 @@ def get_all_teams():
             get_team_for_league(league[0])
 
 
+def create_fixtures(fixtures):
+    for fixture in fixtures:
+        create_fixture(fixtures[fixture])
+
+
+def create_fixture(fixture):
+    query = """INSERT INTO fixtures(
+        id,
+        event_date,
+        event_timestamp,
+        league,
+        round,
+        home_team,
+        away_team,
+        status,
+        status_short,
+        goals_home_team,
+        goals_away_team,
+        halftime_score,
+        final_score,
+        penalty, 
+        elapsed
+    )
+    SELECT {0}, '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}', '{8}', {9}, '{10}', '{11}', '{12}', '{13}', '{14}'
+    WHERE NOT EXISTS(SELECT id FROM fixtures WHERE id = {0});
+    """.format(
+        fixture['fixture_id'],
+        fixture['event_date'],
+        fixture['event_timestamp'],
+        fixture['league_id'],
+        fixture['round'],
+        fixture['homeTeam_id'],
+        fixture['awayTeam_id'],
+        fixture['status'],
+        fixture['statusShort'],
+        fixture['goalsHomeTeam'],
+        fixture['goalsAwayTeam'],
+        fixture['halftime_score'],
+        fixture['final_score'],
+        fixture['penalty'],
+        fixture['elapsed']
+    )
+    connect(query)
+
+
+def get_fixture_for_league(league_id):
+    response = requests.get(f'https://api-football-v1.p.rapidapi.com/fixtures/league/{league_id}',
+                            headers={
+                                "X-RapidAPI-Key": "XXXX"
+                            })
+    body = response.json()
+    print(body)
+    fixtures = body['api']['fixtures']
+    create_fixtures(fixtures)
+
+
+def get_all_fixtures():
+    leagues = connect('SELECT * FROM leagues;')
+    for league in leagues:
+        if league[2] == "England" and league[4] == "2018":
+            get_fixture_for_league(league[0])
+
+
 def get_team_for_league(league_id):
     response = requests.get(f'https://api-football-v1.p.rapidapi.com/teams/league/{league_id}',
                             headers={
@@ -69,5 +132,10 @@ def get_team_for_league(league_id):
     create_teams(teams)
 
 
+# Use the below to populate all English Fixtures from 2018/19
+# get_leagues()
+# connect('SELECT * FROM leagues;')
 # get_all_teams()
-# connect('SELECT COUNT(*) FROM teams;')
+# connect('SELECT * FROM teams;')
+# get_all_fixtures()
+# connect('SELECT * FROM fixtures;')
