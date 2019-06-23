@@ -2,6 +2,8 @@ import requests
 import json
 from db.postgres import connect
 
+api_key = "xxxx"
+
 
 def create_team(team):
     query = '''INSERT INTO teams(
@@ -43,7 +45,7 @@ def create_leagues(leagues):
 def get_leagues():
     response = requests.get("https://api-football-v1.p.rapidapi.com/leagues",
                             headers={
-                                "X-RapidAPI-Key": "XXXX"
+                                "X-RapidAPI-Key": api_key
                             })
     body = response.json()
     print(body)
@@ -54,7 +56,7 @@ def get_leagues():
 def get_all_teams():
     leagues = connect('SELECT * FROM leagues;')
     for league in leagues:
-        if league[2] == "England" and league[4] == "2018":
+        if league[2] == "England" and league[4] == "2016":
             get_team_for_league(league[0])
 
 
@@ -106,7 +108,7 @@ def create_fixture(fixture):
 def get_fixture_for_league(league_id):
     response = requests.get(f'https://api-football-v1.p.rapidapi.com/fixtures/league/{league_id}',
                             headers={
-                                "X-RapidAPI-Key": "XXXX"
+                                "X-RapidAPI-Key": api_key
                             })
     body = response.json()
     print(body)
@@ -117,14 +119,14 @@ def get_fixture_for_league(league_id):
 def get_all_fixtures():
     leagues = connect('SELECT * FROM leagues;')
     for league in leagues:
-        if league[2] == "England" and league[4] == "2018":
+        if league[2] == "Spain" and league[4] == "2018":
             get_fixture_for_league(league[0])
 
 
 def get_team_for_league(league_id):
     response = requests.get(f'https://api-football-v1.p.rapidapi.com/teams/league/{league_id}',
                             headers={
-                                "X-RapidAPI-Key": "XXXX"
+                                "X-RapidAPI-Key": api_key
                             })
     body = response.json()
     print(body)
