@@ -119,7 +119,7 @@ def get_fixture_for_league(league_id):
 def get_all_fixtures():
     leagues = connect('SELECT * FROM leagues;')
     for league in leagues:
-        if league[2] == "Spain" and league[4] == "2018":
+        if league[2] == "England" and league[4] == "2018":
             get_fixture_for_league(league[0])
 
 
