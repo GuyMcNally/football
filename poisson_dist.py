@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import re
 from scipy.stats import poisson, skellam
 from db.postgres import connect_with_names
 
